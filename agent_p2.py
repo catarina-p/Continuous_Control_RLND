@@ -56,19 +56,15 @@ class Agent:
 
         # Replay memory
         self.replay = PrioritizedReplayBuffer(action_size, BUFFER_SIZE, BATCH_SIZE, seed)
-        # Initialize time step (for updating every PRIMARY_UPDATE steps)
-        self.prim_step = 0
-        # Initialize time step (for updating every TARGET_UPDATE steps)
-        self.target_step = 0
     
-    def step(self, state, action, reward, next_state, done, timestep):
+    def step(self, state, action, reward, next_state, done, step_num):
         """Save experience in replay memory, and learn."""
 
         # Save experience in replay memory
         self.replay.add(state, action, reward, next_state, done)
         
         # Learn every UPDATE_EVERY time steps.
-        if len(self.replay) > BATCH_SIZE and timestep % UPDATE_EVERY == 0:
+        if len(self.replay) > BATCH_SIZE and step_num % UPDATE_EVERY == 0:
             for _ in range(NUM_PASSES):
                 self.learn(GAMMA)  
         
